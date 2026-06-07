@@ -1,7 +1,7 @@
 # discord-things
 Just some discord stuff !!
 
-# https://explysm.github.io/discord-things/
+# https://sudoloser.github.io/discord-things/
 ## Fonts
 >[!NOTE]
 >Is there a font you want that is not listed on this website or bunny-fonts?
@@ -12,32 +12,32 @@ Just some discord stuff !!
 >(Check existing font pack jsons for format) 
 ### Papyrus
 ```
-https://raw.githubusercontent.com/explysm/discord-things/main/fonts/papyrus.json
+https://raw.githubusercontent.com/sudoloser/discord-things/main/fonts/papyrus.json
 ```
 
 
 ### Comic Sans
 ```
-https://raw.githubusercontent.com/explysm/discord-things/main/fonts/comic-sans.json
+https://raw.githubusercontent.com/sudoloser/discord-things/main/fonts/comic-sans.json
 ```
 
 ### avali scratch
 ```
-https://raw.githubusercontent.com/explysm/discord-things/main/fonts/avali-scratch.json
+https://raw.githubusercontent.com/sudoloser/discord-things/main/fonts/avali-scratch.json
 ```
 
 ### Minecraft Ten
 ```
-https://raw.githubusercontent.com/explysm/discord-things/main/fonts/minecraft-ten.json
+https://raw.githubusercontent.com/sudoloser/discord-things/main/fonts/minecraft-ten.json
 ```
 
 ### mojangles seven
 ```
-https://raw.githubusercontent.com/explysm/discord-things/main/fonts/mojangles-seven.json
+https://raw.githubusercontent.com/sudoloser/discord-things/main/fonts/mojangles-seven.json
 ```
 
 
 ### Cheeky Rabbit
 ```
-https://raw.githubusercontent.com/explysm/discord-things/main/fonts/cheeky-rabbit.json
+https://raw.githubusercontent.com/sudoloser/discord-things/main/fonts/cheeky-rabbit.json
 ``
