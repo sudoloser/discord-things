@@ -9,108 +9,87 @@
     <style>
         .portal-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
         }
         
         .portal-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
+            background: var(--surface);
             border-radius: var(--radius-lg);
-            padding: 2.5rem;
-            text-align: center;
+            padding: 2rem;
             text-decoration: none;
-            color: var(--text-color);
-            /* Use the master transition from the main style.css */
-            transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), 
-                        transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
-                        border-color 0.3s,
-                        background-color 0.3s;
-            position: relative;
-            overflow: hidden;
+            color: var(--text-primary);
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 250px;
+            align-items: flex-start;
+            justify-content: flex-start;
+            min-height: 180px;
         }
         
         .portal-card:hover {
-            transform: translateY(-8px) !important; /* Ensure hover transform overrides scroll animation */
-            border-color: var(--accent-color);
-            box-shadow: var(--shadow-lg);
-            background: var(--card-hover-bg);
+            background: var(--surface-hover);
         }
         
         .portal-icon {
-            font-size: 4rem;
-            margin-bottom: 1.5rem;
-            color: var(--secondary-text);
-            transition: color 0.3s;
-        }
-        
-        .portal-card:hover .portal-icon {
-            color: var(--accent-color);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
         }
         
         .portal-title {
-            font-size: 1.5rem;
+            font-size: 1.125rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
         }
         
-        .portal-cardDesc {
-            color: var(--secondary-text);
-            font-size: 1rem;
+        .portal-desc {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            line-height: 1.5;
         }
 
         .wip-badge {
-            position: absolute;
-            top: 1.25rem;
-            right: 1.25rem;
-            background: var(--accent-color);
-            color: #000;
-            font-size: 0.7rem;
-            font-weight: 800;
-            padding: 0.3rem 0.8rem;
-            border-radius: 99px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+            background: var(--accent);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: var(--radius-sm);
+            margin-bottom: 1rem;
+            display: inline-block;
         }
         
         .portal-card.disabled {
-            opacity: 0.6;
-            cursor: default;
+            opacity: 0.5;
+            cursor: not-allowed;
             pointer-events: none;
         }
     </style>
 </head>
 <body>
-    <script src="https://keepandroidopen.org/banner.js"></script>
     <div class="container">
-        <header style="text-align: center; margin-bottom: 4rem;">
-            <h1 style="font-size: 3.5rem;">Discord Things</h1>
+        <header>
+            <h1>Discord Things</h1>
             <p>A collection of random stuff for Discord.</p>
         </header>
 
         <div class="portal-grid">
             <a href="clients/index.html" class="portal-card">
-                <i class="fa-solid fa-desktop"></i>
+                <i class="fa-solid fa-desktop portal-icon"></i>
                 <div class="portal-title">Clients</div>
-                <div class="portal-desc">Custom Discord clients.</div>
+                <div class="portal-desc">Browse custom Discord client definitions and assets.</div>
             </a>
             <a href="fonts/index.html" class="portal-card">
                 <i class="fas fa-font portal-icon"></i>
                 <div class="portal-title">Fonts</div>
-                <div class="portal-desc">Custom fonts for Discord clients. Preview and download.</div>
+                <div class="portal-desc">Preview and download custom fonts for Discord clients.</div>
             </a>
             
             <a href="plugins/index.html" class="portal-card">
                 <i class="fas fa-plug portal-icon"></i>
                 <div class="portal-title">Plugins</div>
-                <div class="portal-desc">Vendetta/Revenge plugins to enhance your experience.</div>
+                <div class="portal-desc">Vendetta and Revenge plugins to enhance your mobile experience.</div>
             </a>
         </div>
 
@@ -118,24 +97,5 @@
             <p>Powered by GitHub Pages</p>
         </footer>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Animate on Scroll ---
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry, index) => {
-                    if (entry.isIntersecting) {
-                        // Add a delay based on the item's order
-                        entry.target.style.transitionDelay = `${index * 100}ms`;
-                        entry.target.classList.add('in-view');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            document.querySelectorAll('.portal-card').forEach(card => {
-                observer.observe(card);
-            });
-        });
-    </script>
 </body>
 </html>

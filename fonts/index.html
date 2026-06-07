@@ -14,7 +14,7 @@
     <div class="container">
         <header>
             <h1><a href="../index.html" style="text-decoration: none; color: inherit;">Discord Things</a> / Fonts</h1>
-            <p>Font Repository Viewer</p>
+            <p>Preview and download custom fonts for Discord clients.</p>
 
             <div class="main-navigation">
                 <div class="nav-pill"></div>
@@ -29,14 +29,13 @@
                     <i class="fas fa-search search-icon"></i>
                     <input type="text" id="search-input" placeholder="Find a font...">
                 </div>
-                <div class="search-container" style="margin-top: 10px;">
+                <div class="search-container" style="margin-top: 0.5rem;">
                      <i class="fas fa-eye search-icon"></i>
                      <input type="text" id="custom-preview-input" placeholder="Type to preview text...">
                 </div>
                 
-                <!-- Toolbar -->
                 <div class="toolbar">
-                    <select id="sort-select" class="modal-input">
+                    <select id="sort-select">
                         <option value="newest">Newest First</option>
                         <option value="oldest">Oldest First</option>
                         <option value="az">Name (A-Z)</option>
@@ -47,7 +46,7 @@
                         <i class="fas fa-sync-alt"></i>
                     </button>
                     
-                    <button id="discord-mode-btn" class="btn-secondary" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <button id="discord-mode-btn" class="btn-secondary">
                         <i class="fab fa-discord"></i> Discord Preview
                     </button>
                 </div>
@@ -57,7 +56,7 @@
         <div id="fonts-view" class="main-tab-content">
             <div id="repo-container">
                 <div class="loading">
-                    <i class="fas fa-spinner fa-spin"></i> Loading fonts from GitHub...
+                    <i class="fas fa-spinner fa-spin"></i> Loading fonts...
                 </div>
             </div>
         </div>
@@ -69,16 +68,15 @@
         </div>
 
         <div id="google-fonts-view" class="main-tab-content" style="display: none;">
-            <div id="redirect-loading" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 50vh; text-align: center;">
+            <div id="redirect-loading" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 40vh; text-align: center;">
                 <div class="loader-ring"></div>
-                <h2 style="margin-top: 2rem; font-weight: 600;">Redirecting to Google Fonts...</h2>
-                <p style="color: var(--secondary-text);">Powered by Bunny Fonts</p>
+                <h2 style="margin-top: 1.5rem; font-weight: 600;">Redirecting to Google Fonts...</h2>
+                <p style="color: var(--text-secondary);">Powered by Bunny Fonts</p>
             </div>
         </div>
 
-        <!-- ... existing footer ... -->
         <footer>
-            <div style="margin-bottom: 1.5rem;">
+            <div style="margin-bottom: 1rem; display: flex; justify-content: center; gap: 8px;">
                 <a href="https://github.com/explysm/discord-things" target="_blank" class="btn-copy">
                     <i class="fab fa-github"></i> View Repository
                 </a>

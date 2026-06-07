@@ -47,9 +47,13 @@
                     <p>Replace all placeholder values (text inside <code>""</code>) with your font information:</p>
                 </div>
 
-                <div class="code-example">{
+                <div class="code-block-wrapper">
+                    <button id="copy-button" class="btn-copy-code" title="Copy JSON">
+                        <i class="far fa-copy"></i> Copy
+                    </button>
+                    <div class="code-example" id="json-code-block">{
   "spec": 1,
-  "name": "Font Pack Name"",
+  "name": "Font Pack Name",
   "previewText": "Preview text",
   "main": {
     "ggsans-Normal": "Normal Font Link",
@@ -63,7 +67,7 @@
     "ggsans-SemiboldItalic": "semibold italic font link",
     "ggsans-ExtraBoldItalic": "extrabold italic font link",
     "NotoSans-Normal": "noto normal link",
-    "NotoSans-Bold": "noto bold link"",
+    "NotoSans-Bold": "noto bold link",
     "NotoSans-Medium": "noto medium link",
     "NotoSans-Semibold": "noto semibold link",
     "NotoSans-ExtraBold": "noto extrabold link",
@@ -71,6 +75,7 @@
     "SourceCodePro-Semibold": "sourcecodepro link"
   }
 }</div>
+                </div>
 
                 <div class="guide-step">
                     <h3>What If I Don't Have All Font Variants?</h3>
@@ -167,38 +172,9 @@
                 </div>
             </section>
 
-            <section class="guide-section">
-                <h2><i class="fas fa-lightbulb"></i> Pro Tips</h2>
-                <div class="guide-tips">
-                    <div class="tip-card">
-                        <h4><i class="fas fa-link"></i> Test Links First</h4>
-                        <p>Always test your font and JSON links in a browser before importing.</p>
-                    </div>
-
-                    <div class="tip-card">
-                        <h4><i class="fas fa-copy"></i> Backup Your JSON</h4>
-                        <p>Keep a copy of your JSON file locally for easy editing.</p>
-                    </div>
-
-                    <div class="tip-card">
-                        <h4><i class="fas fa-eye"></i> Preview Text</h4>
-                        <p>Use meaningful preview text that shows off your font's style.</p>
-                    </div>
-
-                    <div class="tip-card">
-                        <h4><i class="fas fa-shield-alt"></i> Font License</h4>
-                        <p>Only use fonts you have permission to redistribute.</p>
-                    </div>
-                </div>
-            </section>
-
             <div class="guide-actions">
-                <a href="index.html" class="btn-primary">
-                    <i class="fas fa-arrow-left"></i> Back to Fonts
-                </a>
-                <a href="https://github.com/explysm/discord-things" target="_blank" class="btn-secondary">
-                    <i class="fab fa-github"></i> View Repository
-                </a>
+                <a href="index.html" class="btn-primary"><i class="fas fa-arrow-left"></i> <span>Back to Fonts</span></a>
+                <a href="https://github.com/explysm/discord-things" target="_blank" class="btn-secondary"><i class="fab fa-github"></i> <span>View Repository</span></a>
             </div>
         </main>
     </div>
@@ -207,24 +183,19 @@
         .guide-content {
             max-width: 800px;
             margin: 0 auto;
-            padding: 2rem 1rem;
+            padding: 2rem 0;
         }
 
         .guide-section {
             margin-bottom: 4rem;
-            padding: 0;
-            background: none;
-            border: none;
         }
 
         .guide-section h2 {
-            color: var(--accent-color);
+            color: var(--text-primary);
             margin-bottom: 1.5rem;
-            font-size: 1.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            border-bottom: 1px solid var(--border-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+            border-bottom: 2px solid var(--border);
             padding-bottom: 0.5rem;
         }
 
@@ -233,138 +204,166 @@
         }
 
         .guide-step h3 {
-            color: var(--text-color);
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            font-size: 1.125rem;
+            font-weight: 700;
         }
 
         .guide-list ul, .guide-step ul, .guide-step ol {
             margin: 1rem 0;
-            padding-left: 1.5rem;
+            padding-left: 1.25rem;
         }
 
         .guide-list li, .guide-step li {
-            margin-bottom: 0.75rem;
-            line-height: 1.6;
-            color: var(--text-color);
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+        }
+
+        .code-block-wrapper {
+            position: relative;
+            margin: 1.5rem 0;
+        }
+
+        .btn-copy-code {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .btn-copy-code:hover {
+            background: #4752c4;
         }
 
         .code-example {
-            background: #0f0f12;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 0.75rem;
-            margin: 1rem 0;
-            font-family: 'JetBrains Mono', 'Fira Code', monospace;
-            font-size: 0.8rem;
+            background: #1e1f22;
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
             overflow-x: auto;
             white-space: pre;
-            max-height: 300px;
-            overflow-y: auto;
+            max-height: 400px;
         }
 
-        .guide-code-section ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .guide-code-section code {
-            background: rgba(255, 255, 255, 0.05);
+        code {
+            background: #1e1f22;
             padding: 0.2rem 0.4rem;
-            border-radius: 4px;
+            border-radius: var(--radius-sm);
             font-family: monospace;
-            font-size: 0.9rem;
+            font-size: 0.9em;
         }
 
         .guide-tips {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
             margin-top: 1.5rem;
         }
 
         .tip-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
+            background: var(--surface);
+            border-radius: var(--radius-md);
             padding: 1.25rem;
         }
 
         .tip-card h4 {
-            color: var(--accent-color);
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9375rem;
+            font-weight: 700;
         }
 
-        .guide-troubleshooting {
-            margin-top: 1.5rem;
+        .tip-card p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
         }
 
         .issue-item {
-            background: rgba(255, 255, 255, 0.02);
-            border-left: 3px solid var(--accent-color);
-            padding: 1rem 1.25rem;
+            background: var(--surface);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
             margin-bottom: 1rem;
         }
 
         .issue-item h4 {
-            color: var(--text-color);
+            color: var(--text-primary);
             margin-bottom: 0.5rem;
-            font-size: 1.05rem;
+            font-size: 1rem;
+            font-weight: 700;
         }
 
         .issue-item p {
             margin: 0.25rem 0;
-            font-size: 0.9rem;
-            color: var(--secondary-text);
-        }
-
-        .issue-item p strong {
-            color: var(--accent-color);
+            font-size: 0.875rem;
+            color: var(--text-secondary);
         }
 
         .guide-actions {
             display: flex;
-            gap: 1rem;
+            gap: 0.75rem;
             justify-content: center;
             margin-top: 4rem;
             padding-top: 2rem;
-            border-top: 1px solid var(--border-color);
-            flex-wrap: wrap;
+            border-top: 2px solid var(--border);
         }
 
-        @media (max-width: 768px) {
-            .guide-content {
-                padding: 1rem 1.25rem;
-            }
-
-            .guide-section {
-                margin-bottom: 3rem;
-            }
-
-            .guide-section h2 {
-                font-size: 1.4rem;
-            }
-
-            .guide-tips {
-                grid-template-columns: 1fr;
-            }
-
-            .guide-actions {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .guide-actions .btn-primary,
-            .guide-actions .btn-secondary {
-                width: 100%;
-                max-width: 300px;
-            }
+        @media (max-width: 600px) {
+            .guide-actions { flex-direction: column; }
+            .guide-actions * { width: 100%; }
         }
     </style>
+    <script>
+        document.getElementById('copy-button').addEventListener('click', function() {
+            const code = document.getElementById('json-code-block').innerText;
+            const btn = this;
+            const originalHtml = btn.innerHTML;
+
+            function showSuccess() {
+                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => { btn.innerHTML = originalHtml; }, 2000);
+            }
+
+            // 1. Try Navigator API
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(code).then(showSuccess).catch(err => {
+                    console.error('Clipboard API failed', err);
+                    fallbackCopy(code);
+                });
+            } else {
+                fallbackCopy(code);
+            }
+
+            function fallbackCopy(text) {
+                try {
+                    const el = document.createElement('textarea');
+                    el.value = text;
+                    el.setAttribute('readonly', '');
+                    el.style.position = 'absolute';
+                    el.style.left = '-9999px';
+                    document.body.appendChild(el);
+                    el.select();
+                    const success = document.execCommand('copy');
+                    document.body.removeChild(el);
+                    if (success) showSuccess();
+                    else btn.innerText = 'Error';
+                } catch (e) {
+                    console.error('Fallback failed', e);
+                    btn.innerText = 'Error';
+                }
+            }
+        });
+    </script>
 </body>
 </html>
