@@ -45,14 +45,14 @@
 
         <footer>
             <div style="margin-bottom: 1rem; display: flex; justify-content: center; gap: 8px;">
-                <a href="https://github.com/sudoloser/discord-things" target="_blank" class="btn-copy">
-                    <i class="fab fa-github"></i> View Repository
+                <a href="https://sdlsr.dpdns.org/git/sudoloser/discord-things" target="_blank" class="btn-copy">
+                    <i class="fab fa-git-alt"></i> View Repository
                 </a>
                 <button id="settings-btn" class="btn-copy">
                     <i class="fas fa-cog"></i> Settings
                 </button>
             </div>
-            <p>Powered by GitHub API</p>
+            <p>Powered by Forgejo API</p>
         </footer>
     </div>
 
@@ -68,8 +68,8 @@
                 <button class="close-modal">&times;</button>
             </div>
             <div class="modal-body">
-                <p>Enter your GitHub Personal Access Token to manage plugins. <br><small style="color: var(--secondary-text); font-style: italic;">*only if you have access to manage the repo</small></p>
-                <input type="password" id="github-token" placeholder="ghp_..." class="modal-input">
+                <p>Enter your Forgejo Access Token to manage plugins. <br><small style="color: var(--secondary-text); font-style: italic;">*only if you have access to manage the repo</small></p>
+                <input type="password" id="forgejo-token" placeholder="Forgejo access token" class="modal-input">
                 <div id="login-msg" class="status-msg"></div>
                 
                 <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.5rem 0;">
@@ -132,9 +132,11 @@
     </div>
 
     <script>
+        const API_BASE = 'https://sdlsr.dpdns.org/git/api/v1';
         const REPO_OWNER = 'sudoloser';
         const REPO_NAME = 'discord-things';
-        const API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/plugins`;
+        const API_URL = `${API_BASE}/repos/${REPO_OWNER}/${REPO_NAME}/contents/plugins`;
+        const RAW_URL = `https://sdlsr.dpdns.org/git/${REPO_OWNER}/${REPO_NAME}/raw/branch/main`;
         const CACHE_KEY = 'discord_things_plugins_cache';
         const CACHE_DURATION = 1000 * 60 * 10; // 10 minutes
         
@@ -176,7 +178,7 @@
             }
         }
 
-        let GITHUB_TOKEN = localStorage.getItem('gh_token');
+        let FORGEJO_TOKEN = localStorage.getItem('forgejo_token');
         let currentSort = 'newest';
         let globalPluginData = [];
 
@@ -190,7 +192,7 @@
         const refetchBtn = document.getElementById('refetch-btn');
         const addPluginBtn = document.getElementById('add-plugin-btn');
         
-        const tokenInput = document.getElementById('github-token');
+        const tokenInput = document.getElementById('forgejo-token');
         const loginSubmit = document.getElementById('login-submit');
         const logoutBtn = document.getElementById('logout-btn');
         const loginMsg = document.getElementById('login-msg');
@@ -275,19 +277,19 @@
             loginMsg.style.color = 'var(--secondary-text)';
 
             try {
-                const response = await fetch('https://api.github.com/user', {
+                const response = await fetch(`${API_BASE}/user`, {
                     headers: { 'Authorization': `token ${token}` }
                 });
                 if (response.ok) {
-                    const repoRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`, { 
+                    const repoRes = await fetch(`${API_BASE}/repos/${REPO_OWNER}/${REPO_NAME}`, { 
                         headers: { 'Authorization': `token ${token}` } 
                     });
                     if (repoRes.ok) {
                         const repoData = await repoRes.json();
                         if (!repoData.permissions.push) throw new Error('You do not have write access to this repository.');
                         
-                        localStorage.setItem('gh_token', token);
-                        GITHUB_TOKEN = token;
+                        localStorage.setItem('forgejo_token', token);
+                        FORGEJO_TOKEN = token;
                         checkAuth();
                         closeModal(loginModal);
                         showToast('Logged in successfully!', 'success');
@@ -304,8 +306,8 @@
         });
 
         logoutBtn.addEventListener('click', () => {
-            localStorage.removeItem('gh_token');
-            GITHUB_TOKEN = null;
+            localStorage.removeItem('forgejo_token');
+            FORGEJO_TOKEN = null;
             checkAuth();
             loginMsg.textContent = 'Logged out.';
         });
@@ -343,7 +345,7 @@
                 const jsonPath = `plugins/${safeName}.json`;
                 const jsonContent = btoa(unescape(encodeURIComponent(JSON.stringify(pluginJson, null, 2))));
                 
-                await githubUpload(jsonPath, jsonContent, `Add plugin: ${name}`);
+                await forgejoUpload(jsonPath, jsonContent, `Add plugin: ${name}`);
 
                 closeModal(uploadModal);
                 showToast('Plugin published successfully!', 'success');
@@ -358,17 +360,17 @@
             }
         });
 
-        async function githubUpload(path, contentBase64, message) {
-            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`;
+        async function forgejoUpload(path, contentBase64, message) {
+            const url = `${API_BASE}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`;
             let sha = await getFileSha(path);
 
             const body = { message, content: contentBase64 };
             if (sha) body.sha = sha;
 
             const response = await fetch(url, {
-                method: 'PUT',
+                method: 'POST',
                 headers: { 
-                    'Authorization': `token ${GITHUB_TOKEN}`, 
+                    'Authorization': `token ${FORGEJO_TOKEN}`, 
                     'Content-Type': 'application/json' 
                 },
                 body: JSON.stringify(body)
@@ -381,8 +383,8 @@
         }
 
         async function getFileSha(path) {
-            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`;
-            const headers = { 'Authorization': `token ${GITHUB_TOKEN}` };
+            const url = `${API_BASE}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`;
+            const headers = { 'Authorization': `token ${FORGEJO_TOKEN}` };
             try {
                 const res = await fetch(url, { headers });
                 if (res.ok) {
@@ -418,10 +420,10 @@
 
             try {
                 const headers = {};
-                if (GITHUB_TOKEN) headers['Authorization'] = `token ${GITHUB_TOKEN}`;
+                if (FORGEJO_TOKEN) headers['Authorization'] = `token ${FORGEJO_TOKEN}`;
 
                 const response = await fetch(API_URL, { headers });
-                if (!response.ok) throw new Error(`GitHub API Error: ${response.statusText}`);
+                if (!response.ok) throw new Error(`Forgejo API Error: ${response.statusText}`);
                 
                 const files = (await response.json()).filter(file => file.name.endsWith('.json'));
 
@@ -438,7 +440,7 @@
                             ...pluginData, 
                             jsonPath: file.path, 
                             jsonSha: file.sha,
-                            githubUrl: file.html_url
+                            webUrl: file.html_url
                         };
                     } catch (e) {
                         console.error('Error fetching plugin json:', file.name, e);
@@ -539,7 +541,7 @@
             const cleanData = { ...pluginData };
             delete cleanData.jsonPath;
             delete cleanData.jsonSha;
-            delete cleanData.githubUrl;
+            delete cleanData.webUrl;
             
             editJsonEditor.value = JSON.stringify(cleanData, null, 2);
             editStatus.textContent = '';
@@ -568,11 +570,11 @@
 
                 // If name changes, we need to delete old file
                 if (currentEditingPlugin.jsonPath !== newPath) {
-                    await githubDelete(currentEditingPlugin.jsonPath, currentEditingPlugin.jsonSha, `Rename plugin: ${currentEditingPlugin.name} to ${jsonData.name}`);
+                    await forgejoDelete(currentEditingPlugin.jsonPath, currentEditingPlugin.jsonSha, `Rename plugin: ${currentEditingPlugin.name} to ${jsonData.name}`);
                 }
 
                 const base64Content = btoa(unescape(encodeURIComponent(content)));
-                await githubUpload(newPath, base64Content, `Update plugin: ${jsonData.name}`);
+                await forgejoUpload(newPath, base64Content, `Update plugin: ${jsonData.name}`);
                  
                  closeModal(editModal);
                  showToast('Plugin updated successfully!', 'success');
@@ -591,7 +593,7 @@
             
             try {
                 showToast('Deleting plugin...', 'info');
-                await githubDelete(pluginData.jsonPath, pluginData.jsonSha, `Delete plugin: ${pluginData.name}`);
+                await forgejoDelete(pluginData.jsonPath, pluginData.jsonSha, `Delete plugin: ${pluginData.name}`);
 
                 showToast('Plugin deleted successfully.', 'success');
                 fetchPlugins(true);
@@ -602,12 +604,12 @@
             }
         }
 
-        async function githubDelete(path, sha, message) {
-            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`;
+        async function forgejoDelete(path, sha, message) {
+            const url = `${API_BASE}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`;
             const response = await fetch(url, {
                 method: 'DELETE',
                 headers: { 
-                    'Authorization': `token ${GITHUB_TOKEN}`, 
+                    'Authorization': `token ${FORGEJO_TOKEN}`, 
                     'Content-Type': 'application/json' 
                 },
                 body: JSON.stringify({ message, sha })
@@ -619,7 +621,7 @@
         }
 
         function checkAuth() {
-            if (GITHUB_TOKEN) {
+            if (FORGEJO_TOKEN) {
                 if (addPluginBtn) addPluginBtn.style.display = 'flex';
                 if (tokenInput) tokenInput.style.display = 'none';
                 if (loginSubmit) loginSubmit.style.display = 'none';
