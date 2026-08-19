@@ -1,6 +1,6 @@
 # discord-things
 Just some discord stuff !!
----
+
 ### Mirrors:
 `https://github.com/sudoloser/discord-things`
 `https://sdlsr.dpdns.org/git/sudoloser/discord-things`
@@ -9,9 +9,7 @@ Just some discord stuff !!
 ## Fonts
 >[!NOTE]
 >Is there a font you want that is not listed on this website or bunny-fonts?
->Message me on discord (.x.v.c.) with the following:
->Font name
->Font links (or just send the .ttf files)
+>You can folow this [guide](https://sudoloser.github.io/discord-things/fonts/guide.html) to make your own!
 >You may also fork the repo, add your desired font and create a pull request.
 >(Check existing font pack jsons for format) 
 ### Papyrus
