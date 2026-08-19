@@ -349,6 +349,7 @@
         const logoutBtn = document.getElementById('logout-btn');
         const loginMsg = document.getElementById('login-msg');
         const themeToggleBtn = document.getElementById('theme-toggle-btn');
+        const searchInput = document.getElementById('search-input');
         
         // Theme Logic
         let isLightMode = localStorage.getItem('discord_things_theme') === 'light';
@@ -1513,7 +1514,6 @@ ${rawUrl}
         }
 
         // Search functionality
-        const searchInput = document.getElementById('search-input');
         searchInput.addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase();
             const cards = document.querySelectorAll('.repo-card');
