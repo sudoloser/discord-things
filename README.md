@@ -41,3 +41,7 @@ https://raw.githubusercontent.com/sudoloser/discord-things/main/fonts/mojangles-
 ```
 https://raw.githubusercontent.com/sudoloser/discord-things/main/fonts/cheeky-rabbit.json
 ``
+---
+### Mirrors:
+`https://github.com/sudoloser/discord-things`
+`https://sdlsr.dpdns.org/git/sudoloser/discord-things`
