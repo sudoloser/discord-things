@@ -44,6 +44,5 @@ https://raw.githubusercontent.com/sudoloser/discord-things/main/fonts/mojangles-
 ### Cheeky Rabbit
 ```
 https://raw.githubusercontent.com/sudoloser/discord-things/main/fonts/cheeky-rabbit.json
-``
----
+```
 
