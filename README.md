@@ -1,10 +1,10 @@
 # discord-things
 Just some discord stuff !!
-
+---
 ### Mirrors:
 `https://github.com/sudoloser/discord-things`
 `https://sdlsr.dpdns.org/git/sudoloser/discord-things`
-
+---
 # https://sudoloser.github.io/discord-things/
 ## Fonts
 >[!NOTE]
