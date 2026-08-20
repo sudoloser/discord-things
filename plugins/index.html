@@ -405,7 +405,7 @@
                 if (cached) {
                     try {
                         const { timestamp, data } = JSON.parse(cached);
-                        if (Date.now() - timestamp < CACHE_DURATION) {
+                        if (Date.now() - timestamp < CACHE_DURATION && data && data.length > 0) {
                             globalPluginData = data;
                             renderPluginList(data);
                             return;
@@ -450,6 +450,11 @@
                 });
 
                 const plugins = (await Promise.all(pluginPromises)).filter(p => p !== null);
+
+                if (plugins.length === 0) {
+                    container.innerHTML = '<div class="error">Failed to load plugins.</div>';
+                    return;
+                }
 
                 localStorage.setItem(CACHE_KEY, JSON.stringify({ 
                     timestamp: Date.now(), 

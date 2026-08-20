@@ -239,7 +239,6 @@
         const REPO_OWNER = 'sudoloser';
         const REPO_NAME = 'discord-things';
         const API_URL = `${API_BASE}/repos/${REPO_OWNER}/${REPO_NAME}/contents/fonts`;
-        const RAW_URL = `https://sdlsr.dpdns.org/git/${REPO_OWNER}/${REPO_NAME}/raw/branch/main`;
         
         const DISCORD_KEYS = [
             "ABCGintoNord-ExtraBold",
@@ -264,6 +263,32 @@
 
         const CACHE_KEY = 'discord_things_fonts_cache';
         const CACHE_DURATION = 1000 * 60 * 10; // 10 minutes
+
+        const FORGEJO_RAW_BASE = `https://sdlsr.dpdns.org/git/${REPO_OWNER}/${REPO_NAME}/raw/branch/main`;
+        const GITHUB_RAW_BASE = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main`;
+        let CDN_BASE = GITHUB_RAW_BASE;
+
+        async function loadCdnConfig() {
+            try {
+                const res = await fetch(`${API_BASE}/repos/${REPO_OWNER}/${REPO_NAME}/contents/cdn.txt`);
+                if (res.ok) {
+                    const data = await res.json();
+                    let text = '';
+                    try { text = decodeURIComponent(escape(atob(data.content))); }
+                    catch (e) { text = atob(data.content); }
+                    CDN_BASE = text.includes("github='false'") ? FORGEJO_RAW_BASE : GITHUB_RAW_BASE;
+                }
+            } catch (e) {
+                console.warn('Failed to load cdn.txt, using GitHub CDN', e);
+            }
+        }
+
+        function resolveFontUrl(url) {
+            if (!url) return url;
+            if (url.startsWith(GITHUB_RAW_BASE + '/')) return CDN_BASE + url.slice(GITHUB_RAW_BASE.length);
+            if (url.startsWith(FORGEJO_RAW_BASE + '/')) return CDN_BASE + url.slice(FORGEJO_RAW_BASE.length);
+            return url;
+        }
         
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
@@ -350,6 +375,7 @@
         const loginMsg = document.getElementById('login-msg');
         const themeToggleBtn = document.getElementById('theme-toggle-btn');
         const searchInput = document.getElementById('search-input');
+        const customPreviewInput = document.getElementById('custom-preview-input');
         
         // Theme Logic
         let isLightMode = localStorage.getItem('discord_things_theme') === 'light';
@@ -398,8 +424,10 @@
         let globalFontData = []; // Store fetched fonts
 
         // Initialization
-        checkAuth();
-        fetchFonts();
+        loadCdnConfig().then(() => {
+            checkAuth();
+            fetchFonts();
+        });
         
         // --- Toolbar Listeners ---
         if (sortSelect) {
@@ -774,7 +802,7 @@
                     
                     await forgejoUpload(path, content, `Add font file: ${file.name}`);
                     
-                    uploadedUrlMap.set(file.name, `${RAW_URL}/${path}`);
+                    uploadedUrlMap.set(file.name, `${CDN_BASE}/${path}`);
                 }
                 
                 // Construct Main Object from Mapping Inputs
@@ -863,7 +891,7 @@
 
         async function updateReadme(fontName, jsonPath) {
              const readmePath = 'README.md';
-             const rawUrl = `${RAW_URL}/${jsonPath}`;
+             const rawUrl = `${CDN_BASE}/${jsonPath}`;
              
              // Fetch current README
              const url = `${API_BASE}/repos/${REPO_OWNER}/${REPO_NAME}/contents/${readmePath}`;
@@ -1021,7 +1049,7 @@ ${rawUrl}
                 if (cached) {
                     try {
                         const { timestamp, data } = JSON.parse(cached);
-                        if (Date.now() - timestamp < CACHE_DURATION) {
+                        if (Date.now() - timestamp < CACHE_DURATION && data && data.length > 0) {
                             globalFontData = data; // Set global data from cache
                             renderFontList(data, container);
                             return;
@@ -1057,7 +1085,7 @@ ${rawUrl}
                         const fontData = await fileRes.json();
                         return { 
                             ...fontData, 
-                            rawUrl: file.download_url, 
+                            rawUrl: resolveFontUrl(file.download_url), 
                             webUrl: file.html_url,
                             jsonPath: file.path,
                             jsonSha: file.sha 
@@ -1069,6 +1097,11 @@ ${rawUrl}
                 });
 
                 const fonts = (await Promise.all(fontPromises)).filter(f => f !== null);
+
+                if (fonts.length === 0) {
+                    container.innerHTML = '<div class="error">Failed to load fonts.</div>';
+                    return;
+                }
 
                 // Update Cache
                 localStorage.setItem(CACHE_KEY, JSON.stringify({
@@ -1143,14 +1176,14 @@ ${rawUrl}
             if (fontData.main) {
                 const keys = Object.keys(fontData.main);
                 const preferred = keys.find(k => k.includes('Normal') || k.includes('Regular')) || keys[0];
-                if (preferred) ttfUrl = fontData.main[preferred];
+                if (preferred) ttfUrl = resolveFontUrl(fontData.main[preferred]);
             }
 
             const cssFontName = `custom-${fontData.name.replace(/[^a-zA-Z0-9]/g, '-')}-font`;
 
             if (ttfUrl) {
                 try {
-                    const fontFace = new FontFace(cssFontName, `url(${ttfUrl})`);
+                    const fontFace = new FontFace(cssFontName, `url("${ttfUrl}")`);
                     await fontFace.load();
                     document.fonts.add(fontFace);
                 } catch (e) {
@@ -1369,7 +1402,6 @@ ${rawUrl}
         }
         
         // Custom Preview Logic
-        const customPreviewInput = document.getElementById('custom-preview-input');
         customPreviewInput.addEventListener('input', (e) => {
             const text = e.target.value;
             

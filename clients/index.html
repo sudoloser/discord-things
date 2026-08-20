@@ -464,7 +464,7 @@
                 if (cached) {
                     try {
                         const { timestamp, data } = JSON.parse(cached);
-                        if (Date.now() - timestamp < CACHE_DURATION) {
+                        if (Date.now() - timestamp < CACHE_DURATION && data && data.length > 0) {
                             globalClientData = data;
                             renderClientList(data);
                             return;
@@ -504,6 +504,11 @@
                 });
 
                 const clients = (await Promise.all(clientPromises)).filter(c => c !== null);
+
+                if (clients.length === 0) {
+                    container.innerHTML = '<div class="error">Failed to load clients.</div>';
+                    return;
+                }
 
                 localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data: clients }));
                 globalClientData = clients;
